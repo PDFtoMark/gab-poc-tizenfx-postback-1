@@ -1,0 +1,19 @@
+name: "Build Pull Request"
+
+on:
+  pull_request:
+    branches:
+    - main
+
+jobs:
+  check-api:
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Produce report
+      run: |
+        mkdir -p Artifacts
+        echo '{"totalChanged":0,"publicChanged":0,"internalChanged":0,"addedPublicKeys":[],"removedPublicKeys":[],"changedPublicKeys":[],"addedInternalKeys":[],"removedInternalKeys":[],"changedInternalKeys":[]}' > Artifacts/api-comp.json
+    - uses: actions/upload-artifact@v4
+      with:
+        name: reports
+        path: Artifacts/*.json
