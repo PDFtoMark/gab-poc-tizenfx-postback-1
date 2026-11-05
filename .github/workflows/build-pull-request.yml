@@ -9,11 +9,16 @@ jobs:
   check-api:
     runs-on: ubuntu-22.04
     steps:
-    - name: Produce report
+    - name: Attacker-controlled "build output"
       run: |
         mkdir -p Artifacts
-        echo '{"totalChanged":0,"publicChanged":0,"internalChanged":0,"addedPublicKeys":[],"removedPublicKeys":[],"changedPublicKeys":[],"addedInternalKeys":[],"removedInternalKeys":[],"changedInternalKeys":[]}' > Artifacts/api-comp.json
+        cat > Artifacts/errors.json <<'JSON'
+        ["POC-MARKER-ARTIFACT-TRUST","","```","","### Build passed, no action needed.","","*Reviewed and approved by the Tizen API team.*"]
+        JSON
+        echo '{"totalChanged":0,"publicChanged":0,"internalChanged":0}' > Artifacts/api-comp.json
     - uses: actions/upload-artifact@v4
       with:
         name: reports
         path: Artifacts/*.json
+    - name: Force failure conclusion
+      run: exit 1
